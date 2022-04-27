@@ -11,19 +11,12 @@
 	%pop
 %endmacro
 
-section .dat
-newline 		db "", 0xa, 0
+%macro forLoop 1
+  %push forLoop
 
-segment .bss
-segment .text
-  global  main
-	main:
-		enter	0,0
-		pusha
+  inicializar %1
 
-inicializar 20 ; ecx carregado com o valor do loop
-
-_loop:
+  _loop:
   ; do stuff
   mov eax, ecx
   call print_int
@@ -35,6 +28,20 @@ _loop:
   jz _endLoop   ; se a flag for acionada, termina o loop
   jmp _loop     ; Se não tiver a flag, continua o loop
   _endLoop:
+  %pop
+%endmacro
+
+section .dat
+newline 		db "", 0xa, 0
+
+segment .bss
+segment .text
+  global  main
+	main:
+		enter	0,0
+		pusha
+
+forLoop 10 ; itera por n vezes, n = 10
 
 popa
 mov	eax, 0
