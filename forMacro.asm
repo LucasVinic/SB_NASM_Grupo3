@@ -11,55 +11,30 @@
 	%pop
 %endmacro
 
-; declara "loop" com 2 parametros
-; cria e pusha instancia de loop
-; jnz (jump if the zero flag is not set) volta pra corpoLoop
-%macro loop 2
-	%push loop
-	jnz corpoLoop 
-%endmacro
-
-; declara "saiLoop" com 0 parametros
-; cria "saiLoop"
-; desempilha saiLoop
-%macro saiLoop 0
-	%$saiLoop:
-	%pop
-%endmacro
-
-; declara "incrementar" com 1 parametro
-; cria e pusha instancia de "incrementar"
-; incrementa reg %1 
-; desempilha "incrementar"
-%macro incrementar 1
-	%push incrementar
-	inc %1
-	%pop
-%endmacro
-
 section .dat
 newline 		db "", 0xa, 0
 
 segment .bss
-
 segment .text
   global  main
 	main:
 		enter	0,0
 		pusha
 
-inicializar 0
+inicializar 20 ; ecx carregado com o valor do loop
 
-labelLoop:
-	loop ecx, 10 ; realiza o loop 10 vezes
-		corpoLoop:
-			mov eax, ecx
-			call print_int
-			mov eax, newline
-			call print_string
-			incrementar ecx
-			jmp labelLoop
-			saiLoop
+_loop:
+  ; do stuff
+  mov eax, ecx
+  call print_int
+  mov eax, newline
+  call print_string
+  ; do stuff
+  sub ecx, 1    ; decrementa o contador
+  cmp ecx, 0    ; compara o contador com 0
+  jz _endLoop   ; se a flag for acionada, termina o loop
+  jmp _loop     ; Se não tiver a flag, continua o loop
+  _endLoop:
 
 popa
 mov	eax, 0
