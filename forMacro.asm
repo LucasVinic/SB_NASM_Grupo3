@@ -11,7 +11,7 @@
 	%pop
 %endmacro
 
-%macro forLoop 1
+%macro forLoop 2
   %push forLoop
 
   inicializar %1
@@ -23,8 +23,8 @@
   mov eax, newline
   call print_string
   ; do stuff
-  sub ecx, 1    ; decrementa o contador
-  cmp ecx, 0    ; compara o contador com 0
+  add ecx, 1    ; decrementa o contador
+  cmp ecx, %2    ; compara o contador com 0
   jz _endLoop   ; se a flag for acionada, termina o loop
   jmp _loop     ; Se não tiver a flag, continua o loop
   _endLoop:
@@ -41,7 +41,7 @@ segment .text
 		enter	0,0
 		pusha
 
-forLoop 10 ; itera por n vezes, n = 10
+forLoop 5, 10 ; itera por n vezes, n = 10
 
 popa
 mov	eax, 0
